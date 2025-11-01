@@ -1,7 +1,7 @@
 
 # End2End Virtual Tryon with Visual Reference
 
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=for-the-badge&logo=huggingface)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2101.00001-B31B1B?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2101.00001)
+  [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2101.00001-B31B1B?style=flat)](https://arxiv.org/abs/2101.00001)
   
 
 ![examples](assets/examples.png)
@@ -55,17 +55,11 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
   
 
 ```
-
-  
-
 conda create -n EVTAR python=3.12 -y
 
 conda activate EVTAR
 
 pip install -r requirements.txt
-
-  
-
 ```
 
   
@@ -107,9 +101,6 @@ Please prepare the pretrained weights of the Flux-Kontext model and the Qwen2.5-
   
 
 ```
-
-  
-
 accelerate launch --num_processes 8 --main_process_port 29500 generate_reference.py \
 
 --instance_data_dir "path_to_your_datasets" \
@@ -119,9 +110,6 @@ accelerate launch --num_processes 8 --main_process_port 29500 generate_reference
 --split "train" \
 
 --desc_path "desc.json"
-
-  
-
 ```
 
   
@@ -149,9 +137,6 @@ Here we provide the inference code for our EVTAR.
   
 
 ```
-
-  
-
 accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
 --pretrained_model_name_or_path="[path_to_your_Flux_model]" \
@@ -179,9 +164,6 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 --use_different \
 
 --use_person
-
-  
-
 ```
 
   
@@ -225,12 +207,7 @@ After the preparation of datasets, you can training the virtual-try-on model usi
   
 
 ```
-
-  
-
 accelerate launch --num_processes 8 --main_process_port 29501\
-
-  
 
 train_lora_flux_kontext_1st_stage.py \
 
@@ -277,9 +254,6 @@ train_lora_flux_kontext_1st_stage.py \
 --dropout_reference=0.5 \
 
 --person_prob=0.5
-
-  
-
 ```
 
   
