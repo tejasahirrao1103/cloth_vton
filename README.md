@@ -402,8 +402,16 @@ This code is mainly built upon [Diffusers](https://github.com/huggingface/diffus
 
 ## 💖 Citation
 
-  
-
-  
 
 If you find this repository useful, please consider citing our paper:
+```
+@misc{li2025evtarendtoendtryadditional,
+title={EVTAR: End-to-End Try on with Additional Unpaired Visual Reference},
+author={Liuzhuozheng Li and Yue Gong and Shanyuan Liu and Bo Cheng and Yuhang Ma and Liebucha Wu and Dengyang Jiang and Zanyi Wang and Dawei Leng and Yuhui Yin},
+year={2025},
+eprint={2511.00956},
+archivePrefix={arXiv},
+primaryClass={cs.CV},
+url={https://arxiv.org/abs/2511.00956},
+}
+```
