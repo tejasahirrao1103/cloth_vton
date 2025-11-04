@@ -152,8 +152,8 @@ Here we provide the inference code for our EVTAR.
 ```
 accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 --pretrained_model_name_or_path="[path_to_your_Flux_model]" \
---instance_data_dir="[your_data_directory]" \
---output_dir="[Path_to_LoRA_weights]" \
+--instance_data_dir="example" \
+--output_dir="checkpoints" \
 --mixed_precision="bf16" \
 --split="test" \
 --height=1024 \
