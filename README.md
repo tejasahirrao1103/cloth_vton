@@ -1,10 +1,17 @@
 
+  
+
 # End2End Virtual Tryon with Visual Reference
 
-  [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2101.00001-B31B1B?style=flat)](https://arxiv.org/abs/2101.00001)
+  
+
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2101.00001-B31B1B?style=flat)](https://arxiv.org/abs/2101.00001)
+
   
 
 ![examples](assets/examples.png)
+
+  
 
   
 
@@ -14,7 +21,11 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
+  
+
 ## 💡 Update
+
+  
 
   
 
@@ -22,7 +33,11 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
+  
+
 - [x] [2025.10.13] Release the technical report on Arxiv.
+
+  
 
   
 
@@ -34,7 +49,11 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
+  
+
 -  **And End-To-End virtual try-on model:** Can function either as an inpainting model for placing the target clothing into masked areas, or as a direct garment transfer onto the human body.
+
+  
 
   
 
@@ -42,7 +61,11 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
+  
+
 -  **Improved Performance** Our model achieves state-of-the-art performance on public benchmarks and demonstrates strong generalization ability to in-the-wild inputs.
+
+  
 
   
 
@@ -54,13 +77,15 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
+  
+
 ```
 conda create -n EVTAR python=3.12 -y
-
 conda activate EVTAR
-
 pip install -r requirements.txt
 ```
+
+  
 
   
 
@@ -72,7 +97,11 @@ pip install -r requirements.txt
 
   
 
+  
+
 ### Dataset
+
+  
 
   
 
@@ -82,11 +111,17 @@ Currently, we provide a small test set with reference images for trying our mode
 
   
 
+  
+
 Nevertheless, inference can still be performed in a reference-free setting on public benchmarks, including [VITON-HD](https://github.com/shadow2496/VITON-HD) and [DressCode](https://github.com/aimagelab/dress-code).
 
   
 
+  
+
 ### Reference Data Preparation
+
+  
 
   
 
@@ -96,21 +131,23 @@ One key feature of our method is the use of _reference data_, where an image of 
 
   
 
+  
+
 Please prepare the pretrained weights of the Flux-Kontext model and the Qwen2.5-VL-32B model. And you can generate the reference image using the following commands:
+
+  
 
   
 
 ```
 accelerate launch --num_processes 8 --main_process_port 29500 generate_reference.py \
-
 --instance_data_dir "path_to_your_datasets" \
-
 --inference_batch_size 1 \
-
 --split "train" \
-
 --desc_path "desc.json"
 ```
+
+  
 
   
 
@@ -120,7 +157,11 @@ accelerate launch --num_processes 8 --main_process_port 29500 generate_reference
 
   
 
+  
+
 We provide pretrained backbone networks and LoRA weights for testing and deployment. Please download the `.safetensors` files from [here] and place them in the `checkpoints` directory.
+
+  
 
   
 
@@ -132,7 +173,11 @@ We provide pretrained backbone networks and LoRA weights for testing and deploym
 
   
 
+  
+
 Here we provide the inference code for our EVTAR.
+
+  
 
   
 
@@ -140,31 +185,21 @@ Here we provide the inference code for our EVTAR.
 accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
 --pretrained_model_name_or_path="[path_to_your_Flux_model]" \
-
 --instance_data_dir="[your_data_directory]" \
-
 --output_dir="[Path_to_LoRA_weights]" \
-
 --mixed_precision="bf16" \
-
 --split="test" \
-
 --height=1024 \
-
 --width=768 \
-
 --inference_batch_size=1 \
-
 --cond_scale=2 \
-
 --seed="0" \
-
 --use_reference \
-
 --use_different \
-
 --use_person
 ```
+
+  
 
   
 
@@ -172,7 +207,11 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
   
 
+  
+
 -  `instance_data_dir`: Path to your dataset. For inference on VITON-HD or DressCode, ensure that the words "viton" or "DressCode" appear in the path.
+
+  
 
   
 
@@ -180,7 +219,11 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
   
 
+  
+
 -  `cond_scale`: Resize scale of the reference image during training. Defaults to `1.0` for $512\times384$ and `2.0` for $1024\times768$ resolution.
+
+  
 
   
 
@@ -188,7 +231,11 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
   
 
+  
+
 -  `use_different`: **Only applicable for VITON/DressCode inference.** Whether to use different cloth-person pairs.
+
+  
 
   
 
@@ -198,63 +245,49 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
   
 
+  
+
 ## 🚀 Training Pipeline
 
   
 
-After the preparation of datasets, you can training the virtual-try-on model using following code.
+  
+
+After preparing datasets, you can train the virtual-try-on model using the following code.
+
+  
 
   
 
 ```
 accelerate launch --num_processes 8 --main_process_port 29501\
-
 train_lora_flux_kontext_1st_stage.py \
 
 --pretrained_model_name_or_path="[path_to_your_Flux_model]" \
-
 --instance_data_dir="[path_to_your_datasets]" \
-
 --split="train" \
-
 --output_dir="[path_to_save_your_LoRA_weights]" \
-
 --mixed_precision="bf16" \
-
 --height=1024 \
-
 --width=768 \
-
 --train_batch_size=8 \
-
 --guidance_scale=1 \
-
 --gradient_checkpointing \
-
 --optimizer="adamw" \
-
 --rank=64 \
-
 --lora_alpha=128 \
-
 --use_8bit_adam \
-
 --learning_rate=1e-4 \
-
 --lr_scheduler="constant" \
-
 --lr_warmup_steps=0 \
-
 --num_train_epochs=64 \
-
 --cond_scale=2 \
-
 --seed="0" \
-
 --dropout_reference=0.5 \
-
 --person_prob=0.5
 ```
+
+  
 
   
 
@@ -262,7 +295,11 @@ train_lora_flux_kontext_1st_stage.py \
 
   
 
+  
+
 Defaults to `1.0` for $512\times384$ resolution and `2.0` for $1024\times768$.
+
+  
 
   
 
@@ -270,11 +307,17 @@ Defaults to `1.0` for $512\times384$ resolution and `2.0` for $1024\times768$.
 
   
 
+  
+
 When not selected, the iteration proceeds **without** reference images.
 
   
 
+  
+
 -  `person_prob`: Probability of using unmasked person images in each training iteration.
+
+  
 
   
 
@@ -284,11 +327,17 @@ Otherwise, the iteration uses **agnostic images**, where the target clothing reg
 
   
 
+  
+
 ## 📊 Evaluation
 
   
 
+  
+
 We quantitatively evaluate the quality of virtual try-on results using the FID, KID, SSIM, and LPIPS. Here, we provide the evaluation code for the VITON-HD and DressCode datasets.
+
+  
 
 ```
 # Evaluation on VITON-HD dataset
@@ -296,11 +345,11 @@ We quantitatively evaluate the quality of virtual try-on results using the FID, 
 CUDA_VISIBLE_DEVICES=0 python eval_dresscode.py \
 
 --gt_folder_base [path_to_your_ground_truth_image_folder] \
-
 --pred_folder_base [[path_to_your_generated_image_folder]]\
-
 --paired
 ```
+
+  
 
   
 
@@ -312,33 +361,48 @@ CUDA_VISIBLE_DEVICES=0 python eval_dresscode.py \
 CUDA_VISIBLE_DEVICES=0 python eval.py \
 
 --gt_folder_base [path_to_your_ground_truth_image_folder] \
-
 --pred_folder_base [[path_to_your_generated_image_folder]]\
 ```
 
   
 
+  
+
 -  `paired`: If you perform unpaired generation, where different garments are fitted onto the target person, you should enable this flag during evaluation.
 
+  
+  
 
 Evaluation result on VITON-HD dataset:
+
 ![examples](assets/VITON_results.png)
 
+  
+  
 
 Evaluation result on DressCode dataset:
+
 ![examples](assets/DressCode_results.png)
+
+  
 
 ## 🌸 Acknowledgement
 
   
 
-This code is mainly built upon [diffusers](https://github.com/huggingface/diffusers/tree/main), [Flux](https://github.com/huggingface/diffusers/tree/main/src/diffusers/pipelines/flux), and [CatVTON](https://github.com/Zheng-Chong/CatVTON/) repositories. Thanks so much for their solid work!
+  
+
+This code is mainly built upon [Diffusers](https://github.com/huggingface/diffusers/tree/main), [Flux](https://github.com/huggingface/diffusers/tree/main/src/diffusers/pipelines/flux), and [CatVTON](https://github.com/Zheng-Chong/CatVTON/) repositories. Thanks so much for their solid work!
+
+  
 
   
 
   
 
 ## 💖 Citation
+
+  
 
   
 
