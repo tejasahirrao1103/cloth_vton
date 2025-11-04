@@ -107,7 +107,8 @@ pip install -r requirements.txt
 
   
 
-Currently, we provide a small test set with additional reference images "difference person wearing the target cloth" for trying our model. We plan to release the reference data generation code, along with our proposed full dataset containing model reference images, in the future.
+Currently, we provide a small test set that includes additional reference images of **different persons wearing the target clothes** for testing our model. You can find it in the `examples_try` folder. We plan to release the reference data generation code, along with our complete dataset containing model reference images, in the future.
+
 
   
 
