@@ -5,7 +5,7 @@
 
   
 
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2101.00001-B31B1B?style=flat)](https://arxiv.org/abs/2511.00956)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2511.00956-B31B1B?style=flat)](https://arxiv.org/abs/2511.00956)
 
   
 
@@ -51,7 +51,7 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 
   
 
--  **And End-To-End virtual try-on model:** Can function either as an inpainting model for placing the target clothing into masked areas, or as a direct garment transfer onto the human body.
+-  **An End-To-End virtual try-on model:** Can function either as an inpainting model for placing the target clothing into masked areas, or as a direct garment transfer onto the human body.
 
   
 
@@ -83,6 +83,9 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
 conda create -n EVTAR python=3.12 -y
 conda activate EVTAR
 pip install -r requirements.txt
+cd diffusers
+pip install -e .
+cd ..
 ```
 
   
@@ -148,16 +151,15 @@ Here we provide the inference code for our EVTAR.
 
 ```
 accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
-
 --pretrained_model_name_or_path="[path_to_your_Flux_model]" \
---instance_data_dir="[your_data_directory]" \
---output_dir="[Path_to_LoRA_weights]" \
+--instance_data_dir="[your_data_directory]" \ # e.g. "./example" can be used as a demo directory
+--checkpoint_weight="[Path_to_LoRA_weights]" \
 --mixed_precision="bf16" \
 --split="test" \
---height=1024 \
---width=768 \
+--height=512 \
+--width=384 \
 --inference_batch_size=1 \
---cond_scale=2 \
+--cond_scale=1 \
 --seed="0" \
 --use_reference \
 --use_different \
@@ -174,13 +176,14 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 
   
 
--  `instance_data_dir`: Path to your dataset. For inference on VITON-HD or DressCode, ensure that the words "viton" or "DressCode" appear in the path.
-
+-  `instance_data_dir`: Path to your dataset. If you want to inference on VITON-HD or DressCode, ensure that the words "viton" or "DressCode" appear in the path.
+If you want to use your own dataset, you can organize your files following the directory structure provided in our `./example`, and then set this argument to the corresponding path.
   
 
   
 
--  `output_dir`: Path to the downloaded or trained LoRA weights.
+-  `checkpoint_weight`: Path to the downloaded or trained LoRA weights. Make sure to select the weights that match your desired resolution — for example,
+`512_384_pytorch_lora_weights.safetensors` corresponds to a resolution of $512\times384$ 
 
   
 
@@ -207,7 +210,8 @@ accelerate launch --num_processes 8 --main_process_port 29500 inference.py \
 -  `use_person`: **Only applicable for VITON/DressCode inference.** Whether to use the unmasked person image instead of the agnostic masked image as input for the virtual try-on task.
 
   
-
+We conduct inference on an A800 GPU, which requires approximately 34 GB GPU memory.
+Each image takes about 10 seconds to generate, and the resulting images will be saved automatically in the directory specified by instance_data_dir (e.g. `example/sample_person_unpair_ref`).
   
 
 ## 📊 Evaluation
@@ -222,9 +226,7 @@ We quantitatively evaluate the quality of virtual try-on results using the FID, 
 
 ```
 # Evaluation on VITON-HD dataset
-
 CUDA_VISIBLE_DEVICES=0 python eval_dresscode.py \
-
 --gt_folder_base [path_to_your_ground_truth_image_folder] \
 --pred_folder_base [[path_to_your_generated_image_folder]]\
 --paired
@@ -240,7 +242,6 @@ CUDA_VISIBLE_DEVICES=0 python eval_dresscode.py \
 # Evaluation on DressCode dataset
 
 CUDA_VISIBLE_DEVICES=0 python eval.py \
-
 --gt_folder_base [path_to_your_ground_truth_image_folder] \
 --pred_folder_base [[path_to_your_generated_image_folder]]\
 ```
