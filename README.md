@@ -5,7 +5,7 @@
 
   
 
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EVTAR-ff9900?style=flat)](https://huggingface.co/qihoo360/EVTAR) [![arXiv](https://img.shields.io/badge/arXiv-2511.00956-B31B1B?style=flat)](https://arxiv.org/abs/2511.00956)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-RefVTON-ff9900?style=flat)](https://huggingface.co/qihoo360/RefVTON) [![arXiv](https://img.shields.io/badge/arXiv-2511.00956-B31B1B?style=flat)](https://arxiv.org/abs/2511.00956)
 
   
 
@@ -15,7 +15,7 @@
 
   
 
-We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual Reference, that directly fits the target garment onto the person image while incorporating reference images to enhance the model's ability to preserve and accurately depict clothing details.
+We propose **RefVTON**, an End-to-End Virtual Try-on model with Additional Visual Reference, that directly fits the target garment onto the person image while incorporating reference images to enhance the model's ability to preserve and accurately depict clothing details.
 
   
 
@@ -80,8 +80,8 @@ We propose **EVTAR**, an End-to-End Virtual Try-on model with Additional Visual 
   
 
 ```
-conda create -n EVTAR python=3.12 -y
-conda activate EVTAR
+conda create -n RefVTON python=3.12 -y
+conda activate RefVTON
 pip install -r requirements.txt
 cd diffusers
 pip install -e .
@@ -127,7 +127,7 @@ Nevertheless, inference can still be performed in a reference-free setting on pu
 
   
 
-We provide pretrained backbone networks and LoRA weights for evaluation and deployment. Please download the `.safetensors` files from [here](https://huggingface.co/qihoo360/EVTAR) and place them in the `checkpoints` directory. In addition, download the pretrained weights of **Flux-Kontext.dev** from [here](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev) to serve as the backbone model.
+We provide pretrained backbone networks and LoRA weights for evaluation and deployment. Please download the `.safetensors` files from [here](https://huggingface.co/qihoo360/RefVTON) and place them in the `checkpoints` directory. In addition, download the pretrained weights of **Flux-Kontext.dev** from [here](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev) to serve as the backbone model.
 
   
 
@@ -143,7 +143,7 @@ We provide pretrained backbone networks and LoRA weights for evaluation and depl
 
   
 
-Here we provide the inference code for our EVTAR.
+Here we provide the inference code for our RefVTON.
 
   
 
@@ -255,16 +255,16 @@ CUDA_VISIBLE_DEVICES=0 python eval.py \
   
   
 
-Evaluation result on VITON-HD dataset:
+Evaluation result on VITON-HD and DressCode dataset:
 
-![examples](assets/VITON_results.png)
+![examples](assets/result.png)
 
   
   
 
-Evaluation result on DressCode dataset:
+Evaluation result on three subset of DressCode dataset:
 
-![examples](assets/DressCode_results.png)
+![examples](assets/dresscode_subset.png)
 
   
 
@@ -287,13 +287,13 @@ This code is mainly built upon [Diffusers](https://github.com/huggingface/diffus
 
 If you find this repository useful, please consider citing our paper:
 ```
-@misc{li2025evtarendtoendtryadditional,
-title={EVTAR: End-to-End Try on with Additional Unpaired Visual Reference},
-author={Liuzhuozheng Li and Yue Gong and Shanyuan Liu and Bo Cheng and Yuhang Ma and Liebucha Wu and Dengyang Jiang and Zanyi Wang and Dawei Leng and Yuhui Yin},
-year={2025},
-eprint={2511.00956},
-archivePrefix={arXiv},
-primaryClass={cs.CV},
-url={https://arxiv.org/abs/2511.00956},
+@misc{li2025refvtonpersontopersontryadditional,
+      title={RefVTON: person-to-person Try on with Additional Unpaired Visual Reference}, 
+      author={Liuzhuozheng Li and Yue Gong and Shanyuan Liu and Bo Cheng and Yuhang Ma and Liebucha Wu and Dengyang Jiang and Zanyi Wang and Dawei Leng and Yuhui Yin},
+      year={2025},
+      eprint={2511.00956},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2511.00956}, 
 }
 ```
