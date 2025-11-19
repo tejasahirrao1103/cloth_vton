@@ -1,7 +1,7 @@
 
   
 
-# End2End Virtual Tryon with Visual Reference
+# RefVTON: person-to-person Try on with Additional Unpaired Visual Reference
 
   
 
