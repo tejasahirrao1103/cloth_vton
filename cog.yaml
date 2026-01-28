@@ -6,8 +6,12 @@ build:
     - "libglib2.0-0"
   python_packages:
     - "torch==2.1.0"
+    - "torchvision"
     - "diffusers==0.24.0"
     - "transformers==4.35.2"
     - "accelerate==0.24.1"
     - "huggingface_hub==0.19.4"
+    - "numpy"
+    - "Pillow"
+    - "opencv-python"
 predict: "predict.py:Predictor"
